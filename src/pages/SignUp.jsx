@@ -66,8 +66,8 @@ function SignUp() {
           <label htmlFor="role" className='block text-gray-700 font-medium mb-1'>Role</label>
           <div className='flex gap-2'>
             {
-              ["user", "owner", "deliveryboy"].map((r) => (
-                <button className="flex-1 border rounded-lg px-3 py-2 cursor-pointer text-center font-medium transition-colors" onClick={() => setRole(r)} style={role === r ? { backgroundColor: primarycolor, color: 'white' } : { border: `1px solid ${primarycolor}`, color: `${primarycolor}` }}>{r}</button>
+              ["user", "owner", "deliveryboy"].map((r,index) => (
+                <button key={index} className="flex-1 border rounded-lg px-3 py-2 cursor-pointer text-center font-medium transition-colors" onClick={() => setRole(r)} style={role === r ? { backgroundColor: primarycolor, color: 'white' } : { border: `1px solid ${primarycolor}`, color: `${primarycolor}` }}>{r}</button>
               ))
             }
           </div>
