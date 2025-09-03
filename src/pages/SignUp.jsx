@@ -9,7 +9,7 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../firebase/firebase.js';
 import { ClipLoader } from "react-spinners"
 import { useDispatch } from 'react-redux';
-import { setUserData } from '../redux/userslice.js';
+import { setUserData } from '../redux/userSlice';
 
 function SignUp() {
   const primarycolor = "#ff4d2d"
