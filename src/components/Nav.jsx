@@ -12,6 +12,8 @@ import { setUserData } from '../redux/userSlice';
 
 function Nav() {
     const { userData, city } = useSelector(state => state.user)
+    const { shopData } = useSelector(state => state.owner)
+
     const [showInfo, setShowInfo] = useState(false)
     const [showSearch, setShowSearch] = useState(false)
     const dispatch = useDispatch(null)
@@ -55,13 +57,17 @@ function Nav() {
                 {userData.role == "user" && (showSearch ? <RxCross2 size={25} className='text-[#ff4d2d] md:hidden' onClick={() => setShowSearch(false)} /> : <IoIosSearch size={25} className='text-[#ff4d2d] md:hidden' onClick={() => setShowSearch(true)} />)}
 
                 {userData.role == "owner" ? <>
-                    <button className='hidden  md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d] '>
+                    {shopData &&
+                    <>
+                     <button className='hidden  md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d] '>
                         <FaPlus size={15} />
                         <span>Add Food Items</span>
                     </button>
                     <button className='md:hidden flex items-center p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d] '>
                         <FaPlus size={15} />
                     </button>
+                    </>
+                    }
                     <div className='hidden md:flex items-center gap-1 cursor-pointer relative px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] font-medium '>
                         <TbReceipt2 size={15} />
                         <span>My orders</span>
