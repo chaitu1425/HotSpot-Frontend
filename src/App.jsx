@@ -9,6 +9,7 @@ import Home from './pages/Home.jsx';
 import GetCity from './hooks/GetCity.jsx';
 import Getshop from './hooks/Getshop.jsx';
 import CreateEditShop from './pages/CreateEditShop.jsx';
+import AddItems from './pages/AddItems.jsx';
 export const serverUrl = 'http://localhost:8000';
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
       <Route path='/' element={userData?<Home />:<Navigate to={'/signin'} /> } />
 
       <Route path='/create-shop' element={userData?<CreateEditShop />:<Navigate to={'/signin'} /> } />
+      <Route path='/add-food' element={userData?<AddItems />:<Navigate to={'/signin'} /> } />
+
 
     </Routes>
   )
