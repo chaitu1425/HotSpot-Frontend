@@ -1,10 +1,12 @@
 import React from 'react'
 import { FaTrashAlt } from "react-icons/fa";
 import { FaPen } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 function OwnerItemCard({data}) {
+    const navigate = useNavigate()
   return (
     <div className='flex bg-white rounded-lg shadow-md overflow-hidden border border-[#ff4d2d] w-full max-w-2xl'>
-        <div className='w-36 h-full flex-shrink-0 bg-gray-50'> 
+        <div className='w-36 flex-shrink-0 bg-gray-50'> 
             <img src={data.image} alt="" className='w-full h-full object-cover' />
         </div>
         <div className='flex flex-col justify-between p-3 flex-1'>
@@ -16,8 +18,8 @@ function OwnerItemCard({data}) {
             <div className='flex items-center justify-between'>
                 <div className='text-[#ff4d2d] font-bold'>₹{data.price}</div>
                 <div className='flex items-center gap-2'>
-                    <div className='p-2 rounded-full hover:bg-[#ff4d2d]/10 text-[#ff4d2d] flex items-center gap-2'><FaTrashAlt size={16} /></div>
-                    <div className='p-2 rounded-full hover:bg-[#ff4d2d]/10 text-[#ff4d2d] flex items-center gap-2'><FaPen size={16} /></div>
+                    <div className='p-2 rounded-full hover:bg-[#ff4d2d]/10 text-[#ff4d2d] flex items-center gap-2' onClick={()=>navigate(`/edit-food/${data._id}`)}><FaPen size={16} /></div>
+                    <div className='p-2 rounded-full hover:bg-[#ff4d2d]/10 text-[#ff4d2d] flex items-center gap-2'><FaTrashAlt size={16} /> </div>
                 </div>
                 
             </div>

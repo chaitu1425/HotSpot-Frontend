@@ -1,20 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { FaUtensils } from "react-icons/fa";
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import { serverUrl } from '../App';
 import { setShopData } from '../redux/ownerSlice';
 import axios from 'axios';
+import { FaHandFist } from 'react-icons/fa6';
 import { ClipLoader } from 'react-spinners';
 
-function AddItems() {
-    const navigate = useNavigate()
+function EditItem() {
+  const navigate = useNavigate()
     const dispatch = useDispatch()
+    const { itemId } = useParams()
+    const [currentItem,setCurrentItem] = useState(null)
+    const { ShopData } = useSelector(state=>state.owner)
     const [name,SetName] = useState("")
-    const [price,SetPrice] = useState(0)
+    const [price,SetPrice] = useState("")
     const [category,setCategory] = useState("")
-    const [foodType,setFoodType] = useState("Veg")
+    const [foodType,setFoodType] = useState("")
     const [loading,setLoading] = useState(false)
     const categories = [
             "Snacks",
@@ -30,7 +34,7 @@ function AddItems() {
             "Others"
         ]
 
-    const [frontendImg,setFrontendimg] = useState(null)
+    const [frontendImg,setFrontendimg] = useState(currentItem?.image || null)
     const [backendImg,setBackendImg] = useState(null)
 
     const handleimg = (e)=>{
@@ -51,16 +55,34 @@ function AddItems() {
             if(backendImg){
                 formData.append("image",backendImg)
             }
-            const result = await axios.post(serverUrl+"/api/item/add-item",formData,{withCredentials:true})
+            const result = await axios.post(serverUrl+`/api/item/edit-item/${itemId}`,formData,{withCredentials:true})
             dispatch(setShopData(result.data))
             setLoading(false)
             navigate("/")
-
         } catch (error) {
             setLoading(false)
             console.log(error)
         }
     }
+    
+    useEffect(()=>{
+        const handleItemByid = async()=>{
+            try {
+                const result = await axios.get(serverUrl+`/api/item/get-item/${itemId}`,{withCredentials:true})
+                setCurrentItem(result.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        handleItemByid()
+    },[itemId])
+    useEffect(()=>{
+        SetName(currentItem?.name || "")
+        SetPrice(currentItem?.price || "")
+        setCategory(currentItem?.category || "")
+        setFoodType(currentItem?.foodType || "")
+        setFrontendimg(currentItem?.image || "")
+    },[currentItem])
   return (
     <div className='flex justify-center flex-col items-center p-6 bg-gradient-to-br from-orange-50 relative to-white min-h-screen'>
                 <div className='absolute top-[20px] left-[20px] z-[10] mb-[10px] '>
@@ -72,7 +94,7 @@ function AddItems() {
                             <FaUtensils className='text-[#ff4d2d] w-16 h-16' />
                         </div>
                         <div className='text-3xl font-bold text-gray-900'>
-                            Add Food
+                            Edit Food
                         </div>
                     </div>
                     <form className='space-y-5' onSubmit={handlesubmit}>
@@ -108,11 +130,11 @@ function AddItems() {
                             </select>
                         </div>
 
-                        <button className='w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-200 cursor-pointer' disabled={loading} >{loading? <ClipLoader size={20} color='white'  />:"Save"}</button>
+                        <button className='w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-200 cursor-pointer' disabled={loading}>{loading?<ClipLoader size={20} color='white' />:"Update"}</button>
                     </form>
                 </div>
             </div>
   )
 }
 
-export default AddItems
+export default EditItem

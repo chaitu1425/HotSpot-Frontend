@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import OwnerItemCard from './OwnerItemCard';
 
 function OwnerDashboard() {
-    const { shopData } = useSelector(state => state.owner)
+    const { shopData } = useSelector(state=>state.owner)
     const navigate = useNavigate()
     return (
         <div className='w-full min-h-screen bg-[#fff9f6] flex flex-col items-center'>

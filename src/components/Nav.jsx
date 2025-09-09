@@ -9,10 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { serverUrl } from '../App';
 import { setUserData } from '../redux/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 function Nav() {
-    const { userData, currentcity } = useSelector(state => state.user)
-    const { shopData } = useSelector(state => state.owner)
+    const navigate = useNavigate()
+    const { userData, currentcity } = useSelector(state=>state.user)
+    const { shopData } = useSelector(state=>state.owner)
 
     const [showInfo, setShowInfo] = useState(false)
     const [showSearch, setShowSearch] = useState(false)
@@ -59,11 +61,11 @@ function Nav() {
                 {userData.role == "owner" ? <>
                     {shopData &&
                     <>
-                     <button className='hidden  md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d] '>
-                        <FaPlus size={15} />
+                     <button className='hidden  md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d] ' onClick={()=>navigate("/add-food")}>
+                        <FaPlus size={15}  />
                         <span>Add Food Items</span>
                     </button>
-                    <button className='md:hidden flex items-center p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d] '>
+                    <button className='md:hidden flex items-center p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d] ' onClick={()=>navigate("/add-food")}>
                         <FaPlus size={15} />
                     </button>
                     </>

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { serverUrl } from '../App';
 import { setShopData } from '../redux/ownerSlice';
 import axios from 'axios';
+import { ClipLoader } from 'react-spinners';
 
 function CreateEditShop() {
     const navigate = useNavigate()
@@ -18,6 +19,7 @@ function CreateEditShop() {
     const [state,setState] = useState(shopData?.state || currentstate)
     const [frontendImg,setFrontendimg] = useState(shopData?.image || "")
     const [backendImg,setBackendImg] = useState(null)
+    const [loading,setLoading] = useState(false)
 
     const handleimg = (e)=>{
         const file = e.target.files[0]
@@ -26,6 +28,7 @@ function CreateEditShop() {
     }
     const handlesubmit = async(e)=>{
         e.preventDefault()
+        setLoading(true)
         try {
             const formData = new FormData()
             formData.append("name",name)
@@ -37,8 +40,10 @@ function CreateEditShop() {
             }
             const result = await axios.post(serverUrl+'/api/shop/create-edit',formData,{withCredentials:true})
             dispatch(setShopData(result.data))
-            console.log(result.data)
+            setLoading(false)
+            navigate("/")
         } catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
@@ -83,7 +88,7 @@ function CreateEditShop() {
                             <input type="text" placeholder='State' className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500' value={state} onChange={(e)=>setState(e.target.value)} />
                         </div>
                     </div>
-                    <button className='w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-200 cursor-pointer'>Save</button>
+                    <button className='w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-200 cursor-pointer' disabled={loading} >{loading?<ClipLoader size={20} color='white' />: "Save"} </button>
                 </form>
             </div>
         </div>
