@@ -98,7 +98,7 @@ function Nav() {
                 </div>
                 {showInfo && <div className='fixed top-[80px] right-[10px] md:right-[10%] lg:right-[20%] w-[180px] bg-white shadow-2xl rounded-xl p-[20px] flex flex-col gap-[10px] z-[9999]'>
                     <div className='text-[17px] font-semibold'>{userData?.fullname}</div>
-                    {!userData.role == "owner" && <div className='md:hidden text-[#ff4d2d] font-semibold cursor-pointer'>My Orders</div>}
+                    {userData.role == "user" && <div className='md:hidden text-[#ff4d2d] font-semibold cursor-pointer'>My Orders</div>}
                     <div className='text-[#ff4d2d] font-semibold cursor-pointer' onClick={handleLogout}>Log Out</div>
                 </div>}
             </div>
