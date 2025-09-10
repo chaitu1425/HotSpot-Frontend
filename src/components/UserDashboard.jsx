@@ -5,11 +5,12 @@ import CategoryCard from './CategoryCard';
 import { FaCircleChevronLeft } from "react-icons/fa6";
 import { FaCircleChevronRight } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
+import FoodCard from './FoodCard';
 
 function UserDashboard() {
     const cateScrollRef = useRef()
     const shopScrollRef = useRef()
-    const { currentcity,shopsInMyCity } = useSelector(state => state.user)
+    const { currentcity, shopsInMyCity, itemsInMyCity } = useSelector(state => state.user)
     const [showleftButton, setleftButton] = useState(false)
     const [showrightButton, setrightButton] = useState(false)
 
@@ -39,25 +40,23 @@ function UserDashboard() {
             updateButton(cateScrollRef, setleftButton, setrightButton)
             updateButton(shopScrollRef, setleftShopButton, setrightShopButton)
             cateScrollRef.current.addEventListener('scroll', () => {
-            updateButton(cateScrollRef, setleftButton, setrightButton)})
+                updateButton(cateScrollRef, setleftButton, setrightButton)
+            })
             shopScrollRef.current.addEventListener('scroll', () => {
-            updateButton(shopScrollRef, setleftShopButton, setrightShopButton)
-        })}
-
-
-
-
-        
+                updateButton(shopScrollRef, setleftShopButton, setrightShopButton)
+            })
+        }
     }, [categories])
 
-    
+
 
     return (
         <div className='w-screen min-h-screen flex flex-col gap-5 items-center bg-[#fff9f6] overflow-y-auto'>
             <Nav />
+
             <div className='w-full max-w-6xl flex flex-col gap-5 items-start p-[10px]'>
                 <h1 className='text-gray-800 text-2xl sm:text-3xl'>Inspiration for your first order</h1>
-                <div className='w-full relative '>
+                <div className='w-full relative'>
                     {showleftButton &&
                         <button className='absolute left-0 top-1/2 -translate-y-1/2 bg-[#ff4d2d] text-white p-2 rounded-full shadow-lg hover:bg-[
                     #e64528] z-10' onClick={() => scrollHandler(cateScrollRef, "left")} >
@@ -67,7 +66,7 @@ function UserDashboard() {
                     <div className='w-full flex overflow-x-auto gap-4 pb-2' ref={cateScrollRef}>
                         {
                             categories.map((item, index) => (
-                                <CategoryCard key={index} name={item.category} image={item.image}  />
+                                <CategoryCard key={index} name={item.category} image={item.image} />
                             ))}
                     </div>
                     {showrightButton && <button className='absolute right-0 top-1/2 -translate-y-1/2 bg-[#ff4d2d] text-white p-2 rounded-full shadow-lg hover:bg-[
@@ -76,6 +75,7 @@ function UserDashboard() {
                     </button>}
                 </div>
             </div>
+
             <div className='w-full max-w-6xl flex flex-col gap-5 items-start p-[10px]'>
                 <h1 className='text-gray-800 text-2xl sm:text-3xl'>Best Shop in {currentcity}</h1>
                 <div className='w-full relative '>
@@ -87,7 +87,7 @@ function UserDashboard() {
                     }
                     <div className='w-full flex overflow-x-auto gap-4 pb-2' ref={shopScrollRef}>
                         {
-                            shopsInMyCity.map((shop, index) => (
+                            shopsInMyCity?.map((shop, index) => (
                                 <CategoryCard key={index} name={shop.name} image={shop.image} />
                             ))}
                     </div>
@@ -96,6 +96,15 @@ function UserDashboard() {
                         <FaCircleChevronRight />
                     </button>}
                 </div>
+            </div>
+
+            <div className='w-full max-w-6xl flex flex-col gap-5 items-start p-[10px]'>
+                <h1 className='text-gray-800 text-2xl sm:text-3xl'>Suggested Food Items</h1>
+                <div className='w-full h-auto flex flex-wrap gap-[20px] justify-center'>
+                        {itemsInMyCity?.map((item,index)=>(
+                            <FoodCard key={index} data={item} />
+                        ))}
+                    </div>
             </div>
         </div>
 

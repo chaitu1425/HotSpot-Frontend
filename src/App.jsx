@@ -12,6 +12,7 @@ import CreateEditShop from './pages/CreateEditShop.jsx';
 import AddItems from './pages/AddItems.jsx';
 import EditItem from './pages/EditItem.jsx';
 import GetShopByCity from './hooks/GetShopByCity.jsx';
+import GetItemsByCity from './hooks/GetItemsByCity.jsx';
 export const serverUrl = 'http://localhost:8000';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   GetCity()
   Getshop() 
   GetShopByCity()
+  GetItemsByCity()
   const { userData } = useSelector(state=>state.user)
   return (
     <Routes>
