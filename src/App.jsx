@@ -9,6 +9,7 @@ import Home from './pages/Home.jsx';
 import GetCity from './hooks/GetCity.jsx';
 import Getshop from './hooks/Getshop.jsx';
 import CreateEditShop from './pages/CreateEditShop.jsx';
+import Checkout from './pages/Checkout.jsx'
 import AddItems from './pages/AddItems.jsx';
 import EditItem from './pages/EditItem.jsx';
 import GetShopByCity from './hooks/GetShopByCity.jsx';
@@ -35,6 +36,8 @@ function App() {
       <Route path='/edit-food/:itemId' element={userData?<EditItem />:<Navigate to={'/signin'} /> } />
 
       <Route path='/cart' element={userData?<CartPage />:<Navigate to={'/signin'} />}/>
+      <Route path='/checkout' element={userData?<Checkout />:<Navigate to={'/signin'} />}/>
+
 
     
     </Routes>

@@ -29,7 +29,7 @@ function CartPage() {
                             <span className='text-xl font-bold text-[#ff4d2d] '>₹{totalAmount}</span>
                         </div>
                         <div className='mt-4 flex justify-end'>
-                            <button className='bg-[#ff4d2d] text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-[#e64526] transition cursor-pointer'>Proced to Checkout</button>
+                            <button className='bg-[#ff4d2d] text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-[#e64526] transition cursor-pointer' onClick={()=>navigate('/checkout')}>Proced to Checkout</button>
                         </div>
                     </>
                 )}
