@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { serverUrl } from '../App';
 import { setShopData } from '../redux/ownerSlice';
 import axios from 'axios';
-import { FaHandFist } from 'react-icons/fa6';
 import { ClipLoader } from 'react-spinners';
 
 function EditItem() {

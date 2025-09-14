@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Nav() {
     const navigate = useNavigate()
-    const { userData, currentcity } = useSelector(state=>state.user)
+    const { userData, currentcity , cartItems } = useSelector(state=>state.user)
     const { shopData } = useSelector(state=>state.owner)
 
     const [showInfo, setShowInfo] = useState(false)
@@ -81,16 +81,14 @@ function Nav() {
                     </div>
                 </> : (
                     <>
-                        <div className='relative cursor-pointer'>
+                        <div className='relative cursor-pointer' onClick={()=>navigate("/cart")}>
                             <FiShoppingCart size={25} className='text-[#ff4d2d]' />
-                            <span className='absolute right-[-9px] top-[-12px] text-[#ff4d2d]'>0</span>
+                            <span className='absolute right-[-9px] top-[-12px] text-[#ff4d2d]'>{cartItems.length}</span>
                         </div>
                         <button className='hidden md:block px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium'>My Orders</button>
 
                     </>
                 )}
-
-
 
 
                 <div className='w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#ff4d2d] text-white text-[18px] shadow-xl font-semibold cursor-pointer' onClick={() => setShowInfo(prev => !prev)}>

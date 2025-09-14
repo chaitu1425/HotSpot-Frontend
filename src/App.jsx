@@ -13,6 +13,7 @@ import AddItems from './pages/AddItems.jsx';
 import EditItem from './pages/EditItem.jsx';
 import GetShopByCity from './hooks/GetShopByCity.jsx';
 import GetItemsByCity from './hooks/GetItemsByCity.jsx';
+import CartPage from './pages/CartPage.jsx';
 export const serverUrl = 'http://localhost:8000';
 
 function App() {
@@ -32,6 +33,9 @@ function App() {
       <Route path='/create-shop' element={userData?<CreateEditShop />:<Navigate to={'/signin'} /> } />
       <Route path='/add-food' element={userData?<AddItems />:<Navigate to={'/signin'} /> } />
       <Route path='/edit-food/:itemId' element={userData?<EditItem />:<Navigate to={'/signin'} /> } />
+
+      <Route path='/cart' element={userData?<CartPage />:<Navigate to={'/signin'} />}/>
+
     
     </Routes>
   )
