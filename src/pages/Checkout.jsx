@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { MdDeliveryDining } from "react-icons/md";
+import { CiMobile2 } from "react-icons/ci";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoSearchOutline } from "react-icons/io5";
 import { BiCurrentLocation } from "react-icons/bi";
+import { CiCreditCard2 } from "react-icons/ci";
+
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import { useDispatch, useSelector } from 'react-redux';
 import 'leaflet/dist/leaflet.css';
@@ -22,11 +26,13 @@ function RecenterMap({location}){
 function Checkout() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [paymentMethod,setPaymentMethod] = useState("cod")
     const apikey = import.meta.env.VITE_GEOLOCATION_API;
     const { location, address } = useSelector(state => state.map)
+    const { cartItems,totalAmount } = useSelector(state => state.user)
     const [addressInput,setAddressInput] = useState("")
-
-    
+    const deliveryFee = totalAmount>500 ? 0 : 40
+    const amountwithDelivery = totalAmount + deliveryFee
     const onDragEnd = (e)=>{
         const {lat,lng} = e.target._latlng
         dispatch(setLocation({lat,lon:lng}))
@@ -94,6 +100,58 @@ function Checkout() {
 
                     </div>
                 </section>
+
+                <section>
+                    <h2 className='text-lg font-semibold mb-3 text-gray-800'>Payment Method</h2>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                        <div className={`flex items-center gap-3 rounded-xl border p-4 text-left transition ${paymentMethod ==="cod" ? "border-[#ff4d2d] bg-orange-50 shadow" : "border-gray-200 hover:border-gray-300"}`} onClick={()=>setPaymentMethod("cod")}>
+                            <span className='inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-100'>
+                                <MdDeliveryDining className='text-green-600 text-xl' />
+                            </span>
+                            <div >
+                                <p className='font-medium text-gray-800'>Cash on Delivary</p>
+                                <p className='text-xs text-gray-500'>Pay when your food arrives</p>
+                            </div>
+                        </div>
+                        <div className={`flex items-center gap-3 rounded-xl border p-4 text-left transition ${paymentMethod ==="online" ? "border-[#ff4d2d] bg-orange-50 shadow" : "border-gray-200 hover:border-gray-300"}`} onClick={()=>setPaymentMethod("online")}>
+                            <span className='inline-flex h-10 w-10 items-center justify-center rounded-full bg-purple-100'><CiMobile2 className='text-purple-700 text-xl' /></span>
+                            <span className='inline-flex h-10 w-10 items-center justify-center rounded-full bg-blue-100'><CiCreditCard2 className='text-blue-700 text-xl' /></span>
+                            <div>
+                                <p className='font-medium text-gray-800'>UPI / Credit / Debit Card</p>
+                                <p className='text-xs text-gray-500'>Pay Securely Online</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+                <section>
+                    <h2 className='text-lg font-semibold mb-3 text-gray-800'>Order Summery</h2>
+                    <div className='rounded-xl border bg-gray-50 p-4 space-y-2'>
+                        {cartItems.map((item,index)=>(
+                            <div key={index} className='flex justify-between text-sm text-gray-700' >
+                                <span>{item.name} x {item.quantity}</span>
+                                <span>₹{item.price*item.quantity}</span>
+                            </div>
+                        ))}
+                        <hr className='border-gray-200 my-2' />
+                        <div className='flex justify-between font-medium text-gray-800' >
+                            <span>SubTotal</span>
+                            <span>₹{totalAmount}</span>
+                        </div>
+                        <div className='flex justify-between text-gray-700'>
+                            <span>Delivery fee</span>
+                            <span>{deliveryFee == 0? "Free":'₹'+deliveryFee}</span>
+                        </div>
+                        <div className='flex justify-between text-lg font-bold text-[#ff4d2d] pt-2'>
+                            <span>Total Amount</span>
+                            <span>₹{amountwithDelivery}</span>
+                        </div>
+                    </div>
+                </section>
+                <button className='w-full bg-[#ff4d2d] hover:bg-[#e64526] text-white rounded-xl py-3 font-semibold   '>{paymentMethod=="cod"?"Place Order" : "Pay & Place Order"}</button>
 
             </div>
 
