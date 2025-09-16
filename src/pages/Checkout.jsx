@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import 'leaflet/dist/leaflet.css';
 import { setAddress, setLocation } from '../redux/mapSlice';
 import axios from 'axios';
+import { serverUrl } from '../App';
 
 function RecenterMap({location}){
     if(location.lat && location.lon){
@@ -64,6 +65,27 @@ function Checkout() {
             console.log(error)
         }
     }
+    
+    const handleplaceOrder = async()=>{
+        try {
+            const result = await axios.post(serverUrl+'/api/order/placeorder',{
+                paymentMethod,
+                deliveryAddress:{
+                    text:addressInput,
+                    latitude:location.lat,
+                    longitude:location.lon
+                },
+                totalAmount:amountwithDelivery,
+                cartItems
+            },{withCredentials:true})
+            console.log(result.data)
+            navigate("/order-placed")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     useEffect(()=>{
         setAddressInput(address)
     },[address])
@@ -151,7 +173,7 @@ function Checkout() {
                         </div>
                     </div>
                 </section>
-                <button className='w-full bg-[#ff4d2d] hover:bg-[#e64526] text-white rounded-xl py-3 font-semibold   '>{paymentMethod=="cod"?"Place Order" : "Pay & Place Order"}</button>
+                <button className='w-full bg-[#ff4d2d] hover:bg-[#e64526] text-white rounded-xl py-3 font-semibold' onClick={handleplaceOrder}>{paymentMethod=="cod"?"Place Order" : "Pay & Place Order"}</button>
 
             </div>
 
