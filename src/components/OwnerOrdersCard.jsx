@@ -52,6 +52,19 @@ function OwnerOrdersCard({ data }) {
                 </select>
             </div>
 
+            {
+                data.shopOrders.status=="out for delivery" && 
+                <div className='mt-3 p-2 border rounded-lg text-sm bg-orange-50'>
+                    <p>Available Delivery Boys:</p>
+                    {availableBoys?.length>0?(
+                        availableBoys.map((b,index)=>(
+                            <div key={index} className='text-gray-800 '>{b.fullname}-{b.mobile}</div>
+                        ))
+                    ):<div>Waiting for delivery boys to accept</div>}
+
+                </div>
+            }
+
             <div className='text-right font-bold text-gray-800 text-sm'>
                 Total: ₹{data.shopOrders.subtotal}
             </div>
