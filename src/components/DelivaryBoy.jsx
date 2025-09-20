@@ -3,8 +3,7 @@ import Nav from './Nav'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { serverUrl } from '../App'
-import { setcurrentCity } from '../redux/userSlice'
-import { current } from '@reduxjs/toolkit'
+import DeliveryBoyTracking from './DeliveryBoyTracking'
 
 function DelivaryBoy() {
   const { userData } = useSelector(state => state.user)
@@ -82,7 +81,10 @@ function DelivaryBoy() {
               <p className='text-sm text-gray-500'>{currentOrder.deliveryAddress.text}</p>
               <p className='text-sm text-gray-400'>{currentOrder.shopOrder.shopOrderItems.length} items | ₹{currentOrder.shopOrder.subtotal}</p>
             </div>
+            <DeliveryBoyTracking data={currentOrder} />
+          <button className='mt-4 w-full bg-green-500 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:bg-green-600 active:scale-95 transition-all duration-200'>Mark As Delivered</button>
           </div>
+
         }
 
       </div>
