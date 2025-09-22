@@ -11,11 +11,23 @@ function UserDashboard() {
     const cateScrollRef = useRef()
     const shopScrollRef = useRef()
     const { currentcity, shopsInMyCity, itemsInMyCity } = useSelector(state => state.user)
+    const [updateItemsList,setUpdateItemsList] = useState(itemsInMyCity)
+
+    // scategory scroll
     const [showleftButton, setleftButton] = useState(false)
     const [showrightButton, setrightButton] = useState(false)
-
+    ///shop scroll
     const [showleftShopButton, setleftShopButton] = useState(false)
     const [showrightShopButton, setrightShopButton] = useState(false)
+
+    const handlefilterbyCategory = (category)=>{
+        if(category=="All"){
+            setUpdateItemsList(itemsInMyCity)
+        }else{
+            const filteredList = itemsInMyCity.filter(i=>i.category===category)
+            setUpdateItemsList(filteredList)
+        }
+    }
 
     const updateButton = (ref, setleftButton, setrightButton) => {
         const ele = ref.current
@@ -34,6 +46,10 @@ function UserDashboard() {
             })
         }
     }
+
+    useEffect(()=>{
+        setUpdateItemsList(itemsInMyCity)
+    },[itemsInMyCity])
 
     useEffect(() => {
         if (cateScrollRef.current) {
@@ -66,7 +82,7 @@ function UserDashboard() {
                     <div className='w-full flex overflow-x-auto gap-4 pb-2' ref={cateScrollRef}>
                         {
                             categories.map((item, index) => (
-                                <CategoryCard key={index} name={item.category} image={item.image} />
+                                <CategoryCard key={index} name={item.category} image={item.image} onClick={()=>handlefilterbyCategory(item.category)} />
                             ))}
                     </div>
                     {showrightButton && <button className='absolute right-0 top-1/2 -translate-y-1/2 bg-[#ff4d2d] text-white p-2 rounded-full shadow-lg hover:bg-[
@@ -101,7 +117,7 @@ function UserDashboard() {
             <div className='w-full max-w-6xl flex flex-col gap-5 items-start p-[10px]'>
                 <h1 className='text-gray-800 text-2xl sm:text-3xl'>Suggested Food Items</h1>
                 <div className='w-full h-auto flex flex-wrap gap-[20px] justify-center'>
-                        {itemsInMyCity?.map((item,index)=>(
+                        {updateItemsList?.map((item,index)=>(
                             <FoodCard key={index} data={item} />
                         ))}
                     </div>
