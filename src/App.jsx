@@ -20,6 +20,7 @@ import MyOrders from './pages/MyOrders.jsx';
 import GetmyOrder from './hooks/GetmyOrder.jsx';
 import UpdateLocation from './hooks/UpdateLocation.jsx';
 import TrackOrderPage from './pages/TrackOrderPage.jsx';
+import Shop from './pages/Shop.jsx';
 export const serverUrl = 'http://localhost:8000';
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
   const { userData } = useSelector(state=>state.user)
   return (
     <Routes>
-      <Route path='/signup' element={!userData?<SignUp />:<Navigate to={'/'} />} />
+        
       <Route path='/signin' element={!userData?<SignIn />:<Navigate to={'/'} />} />
       <Route path='/forgot-password' element={!userData?<Forgotpassword />:<Navigate to={'/'} />} />
       <Route path='/' element={userData?<Home />:<Navigate to={'/signin'} /> } />
@@ -48,11 +49,9 @@ function App() {
       <Route path='/order-placed' element={userData?<OrderPlaced />:<Navigate to={'/signin'} />}/>
       <Route path='/my-orders' element={userData?<MyOrders />:<Navigate to={'/signin'} />}/>
       <Route path='/track-order/:orderId' element={userData?<TrackOrderPage />:<Navigate to={'/signin'} />}/>
+      <Route path='/shop/:shopId' element={userData?<Shop />:<Navigate to={'/signin'} />}/>
 
 
-
-
-    
     </Routes>
   )
 }
