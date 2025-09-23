@@ -24,14 +24,13 @@ function RecenterMap({location}){
     return null
 }
 
-
 function Checkout() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [paymentMethod,setPaymentMethod] = useState("cod")
     const apikey = import.meta.env.VITE_GEOLOCATION_API;
     const { location, address } = useSelector(state => state.map)
-    const { cartItems,totalAmount } = useSelector(state => state.user)
+    const { cartItems,totalAmount,userData } = useSelector(state => state.user)
     const [addressInput,setAddressInput] = useState("")
     const deliveryFee = totalAmount>500 ? 0 : 40
     const amountwithDelivery = totalAmount + deliveryFee
@@ -49,13 +48,11 @@ function Checkout() {
         }
     }
     const getCurrentLocation=()=>{
-        navigator.geolocation.getCurrentPosition(async (position)=>{
-        const latitude = position.coords.latitude
-        const longitude = position.coords.longitude
+        const latitude = userData.location.coordinates[1]
+        const longitude = userData.location.coordinates[0]
         dispatch(setLocation({lat:latitude,lon:longitude}))
         getAddressBylatlng(latitude,longitude)
-        })        
-    }
+    }      
 
     const getLatLngAddress = async()=>{
         try {

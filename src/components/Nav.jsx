@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaLocationDot } from "react-icons/fa6";
 import { IoIosSearch } from "react-icons/io";
 import { FiShoppingCart } from "react-icons/fi";
@@ -8,7 +8,7 @@ import { TbReceipt2 } from "react-icons/tb";
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { serverUrl } from '../App';
-import { setUserData } from '../redux/userSlice';
+import { setSearchItems, setUserData } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 function Nav() {
@@ -18,6 +18,7 @@ function Nav() {
 
     const [showInfo, setShowInfo] = useState(false)
     const [showSearch, setShowSearch] = useState(false)
+    const [query,setQuery] = useState("")
     const dispatch = useDispatch(null)
     const handleLogout = async () => {
         try {
@@ -28,6 +29,23 @@ function Nav() {
         }
     }
 
+    const handleSearchItems = async()=>{
+        try {
+            const result = await axios.get(serverUrl+`/api/item/search-items?query=${query}&city=${currentcity}`,{withCredentials:true})
+            dispatch(setSearchItems(result.data))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(()=>{
+        if(query){
+            handleSearchItems()
+        }else{
+            dispatch(setSearchItems())
+        }
+    },[query])
+
     return (
         <div className='w-full h-[80px] flex items-center justify-between md:justify-center gap-[30px] px-[20px] fixed top-0 z-[9999] bg-[#fff9f6] overflow-visible'>
 
@@ -37,9 +55,9 @@ function Nav() {
                     <FaLocationDot className='text-[#ff4d2d]' size={25} />
                     <div className='w-[80%] truncate text-gray-600'>{currentcity}</div>
                 </div>
-                <div className='w-[80%] flex items-center gap-[10px]'>
+                <div className='w-[80%] flex items-center gap-[10px]' >
                     <IoIosSearch size={25} className='text-[#ff4d2d]' />
-                    <input type="text" className='px-[10px] text-gray-700 outline-0 w-full' placeholder='search delicious food...' />
+                    <input type="text" className='px-[10px] text-gray-700 outline-0 w-full' placeholder='search delicious food...' onChange={(e)=>setQuery(e.target.value)} />
                 </div>
             </div>}
 
@@ -51,7 +69,7 @@ function Nav() {
                 </div>
                 <div className='w-[80%] flex items-center gap-[10px]'>
                     <IoIosSearch size={25} className='text-[#ff4d2d]' />
-                    <input type="text" className='px-[10px] text-gray-700 outline-0 w-full' placeholder='search delicious food...' />
+                    <input type="text" className='px-[10px] text-gray-700 outline-0 w-full' placeholder='search delicious food...' onChange={(e)=>setQuery(e.target.value)} />
                 </div>
             </div>}
 

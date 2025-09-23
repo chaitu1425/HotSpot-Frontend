@@ -15,7 +15,7 @@ export const categories = [
     { "category": "Main Course", "image": image2 },
     { "category": "Desserts", "image": image3 },
     { "category": "Pizza", "image": image4 },
-    { "category": "Burgers", "image": image5 },
+    { "category": "Burger", "image": image5 },
     { "category": "Sandwiches", "image": image6 },
     { "category": "South Indian", "image": image7 },
     { "category": "North Indian", "image": image8 },
