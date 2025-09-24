@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IoIosArrowRoundBack } from "react-icons/io";
-import { MdDeliveryDining } from "react-icons/md";
+import { MdDeliveryDining, MdDescription } from "react-icons/md";
 import { CiMobile2 } from "react-icons/ci";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoSearchOutline } from "react-icons/io5";
@@ -76,11 +76,42 @@ function Checkout() {
                 totalAmount:amountwithDelivery,
                 cartItems
             },{withCredentials:true})
-            dispatch(addMyOrder(result.data))
-            navigate("/order-placed")
+            if(paymentMethod=="cod"){
+                dispatch(addMyOrder(result.data))
+                navigate("/order-placed")
+            }else{
+                const orderId = result.data.orderId
+                const razorOrder = result.data.razorpayOrder 
+                openRazorpayWindow(orderId,razorOrder)
+            }
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const openRazorpayWindow = (orderId,razorOrder)=>{
+        const options = {
+            key:import.meta.env.VITE_RAZORPAY_KEY,
+            amount:razorOrder.amount,
+            currency:'INR',
+            name:"HotSpot",
+            description:"Food delivery website",
+            order_id:razorOrder.id,
+            handler:async function (response) {
+                try {
+                    const result = await axios.post(serverUrl+'/api/order/verify-payment',{
+                        razorpay_payment_id : response.razorpay_payment_id,
+                        orderId
+                    },{withCredentials:true})
+                    dispatch(addMyOrder(result.data))
+                    navigate("/order-placed")
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }
+        const razorpay = new window.Razorpay(options) 
+        razorpay.open()
     }
 
 
