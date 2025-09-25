@@ -69,6 +69,16 @@ const userSlice = createSlice({
                 order.shopOrders.status=status
             }
         },
+        updateRealTimeStatus:(state,action)=>{
+            const { orderId,shopId,status }=action.payload
+            const order = state.myOrders.find(o=>o._id==orderId)
+            if(order){
+                const shopOrder = order.shopOrders.find(so=>so.shop._id==shopId)
+                if(shopOrder){
+                    shopOrder.status = status
+                }
+            }
+        },
         setSearchItems:(state,action)=>{
             state.searchItems=action.payload
         },
@@ -77,5 +87,5 @@ const userSlice = createSlice({
         }
     }
 })
-export const {setUserData,setcurrentCity,setCurrentState,setSearchItems,setCurrentAddress,setShopsInMyCity,setItemsInMyCity,AddToCart,UpdateCart,RemoveCartItem,setMyOrders,addMyOrder,updateOrderStatus,setSocket} = userSlice.actions
+export const {setUserData,setcurrentCity,setCurrentState,setSearchItems,setCurrentAddress,setShopsInMyCity,setItemsInMyCity,AddToCart,UpdateCart,RemoveCartItem,setMyOrders,addMyOrder,updateOrderStatus,setSocket,updateRealTimeStatus} = userSlice.actions
 export default userSlice.reducer
