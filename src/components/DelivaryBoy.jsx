@@ -6,7 +6,7 @@ import { serverUrl } from '../App'
 import DeliveryBoyTracking from './DeliveryBoyTracking'
 
 function DelivaryBoy() {
-  const { userData } = useSelector(state => state.user)
+  const { userData,socket } = useSelector(state => state.user)
   const [availableAssignments, setAvailableAssignments] = useState([])
   const [currentOrder, setCurrentOrder] = useState()
   const [showOtpBox,setShowOtpBox] = useState(false)
@@ -59,6 +59,18 @@ function DelivaryBoy() {
       console.log(error)
     }
   }
+
+  useEffect(()=>{
+    socket?.on('newAssignment',(data)=>{
+      if(data.sendTo==userData._id){
+        setAvailableAssignments(prev=>[...prev,data])
+      }
+    }
+  )
+  return ()=>{
+    socket?.off('newAssignment')
+  }
+  },[socket])
 
 
   useEffect(() => {
