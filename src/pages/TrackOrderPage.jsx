@@ -5,7 +5,6 @@ import { serverUrl } from '../App'
 import { IoIosArrowRoundBack } from "react-icons/io";
 import DeliveryBoyTracking from '../components/DeliveryBoyTracking';
 import { useSelector } from 'react-redux';
-import { latLng } from 'leaflet';
 
 
 function TrackOrderPage() {

@@ -11,6 +11,7 @@ function DelivaryBoy() {
   const [currentOrder, setCurrentOrder] = useState()
   const [showOtpBox,setShowOtpBox] = useState(false)
   const [otp,setOtp] = useState("")
+  const [deliveryBoyLocation,setDeliveryBoyLocation] = useState(null)
 
 
   useEffect(()=>{
@@ -20,6 +21,7 @@ function DelivaryBoy() {
      watchpos = navigator.geolocation.watchPosition((position)=>{
         const latitude = position.coords.latitude
         const longitude = position.coords.longitude
+        setDeliveryBoyLocation({lat:latitude,lon:longitude})
         socket.emit('update-location',{
           latitude,
           longitude,
@@ -142,7 +144,16 @@ function DelivaryBoy() {
               <p className='text-sm text-gray-500'>{currentOrder.deliveryAddress.text}</p>
               <p className='text-sm text-gray-400'>{currentOrder.shopOrder.shopOrderItems.length} items | ₹{currentOrder.shopOrder.subtotal}</p>
             </div>
-            <DeliveryBoyTracking data={currentOrder} />
+            <DeliveryBoyTracking data={{
+              deliveryBoylocation:deliveryBoyLocation || {
+                        lat:userData.location.coordinates[1],
+                        lon:userData.location.coordinates[0]
+                    },
+                    customerlocation:{
+                        lat:currentOrder.deliveryAddress.latitude,
+                        lon:currentOrder.deliveryAddress.longitude
+                    }
+            }} />
           {!showOtpBox ? <button className='mt-4 w-full bg-green-500 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:bg-green-600 active:scale-95 transition-all duration-200' onClick={sendOtp}>Mark As Delivered</button>  :
                 <div className='mt-4 p-4 border rounded-xl bg-gray-50'>
                   <p className='text-sm font-semibold mb-2'>Enter Otp send to <span className='text-orange-500 '>{currentOrder.user.fullname}</span></p>
