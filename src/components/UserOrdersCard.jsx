@@ -1,8 +1,12 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { serverUrl } from '../App'
+import { FaStar } from 'react-icons/fa6'
 
 function UserOrdersCard({data}) {
     const navigate = useNavigate()
+    const [selectedRating,setSelectedRating] = useState({})
     const formatDate = (dateSting)=>{
         const date = new Date(dateSting)
         return date.toLocaleString('en-GB',{
@@ -10,6 +14,17 @@ function UserOrdersCard({data}) {
             month:"short",
             year:"numeric"
         })
+    }
+
+    const handleRating = async(itemId,rating)=>{
+        try {
+            const result = await axios.post(serverUrl+'/api/item/rating',{itemId,rating},{withCredentials:true})
+            setSelectedRating(prev=>({
+                ...prev,[itemId]:rating
+            }))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
   return (
@@ -39,9 +54,16 @@ function UserOrdersCard({data}) {
                             <img src={item.item.image} alt="" className='w-full h-24 object-cover rounded' />
                             <p className='text-sm font-semibold mt-1'>{item.name}</p>
                             <p className='text-xs text-gray-500' >Qty: {item.quantity} x ₹{item.price}</p>
+                            {
+                                shopOrder.status==="delivered" && 
+                                <div className='flex space-x-1 mt-2'>{[1,2,3,4,5].map((star)=>(
+                                    <button key={star} className={`text-lg ${selectedRating[item.item._id] >= star ? 'text-yellow-400':'text-gray-400'}`} onClick={()=>handleRating(item.item._id,star)}>★</button>
+                                ))}</div>
+                            }
                         </div>
                     ))}
                 </div>
+
                 <div className='flex justify-between items-center border-t pt-2'>
                     <p className='font-semibold '>Sub Total: ₹{shopOrder.subtotal}</p>
                     <span className='text-sm font-medium text-blue-600'>Status: {shopOrder.status}</span>
