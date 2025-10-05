@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { serverUrl } from '../App'
 import DeliveryBoyTracking from './DeliveryBoyTracking'
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 function DelivaryBoy() {
   const { userData,socket } = useSelector(state => state.user)
@@ -12,6 +13,7 @@ function DelivaryBoy() {
   const [showOtpBox,setShowOtpBox] = useState(false)
   const [otp,setOtp] = useState("")
   const [deliveryBoyLocation,setDeliveryBoyLocation] = useState(null)
+  const [todayDeliveries,setTodayDeliveries] = useState([])
 
 
   useEffect(()=>{
@@ -88,6 +90,16 @@ function DelivaryBoy() {
     }
   }
 
+  const handletodayDeliveries = async () => {
+    try {
+      const result = await axios.get(serverUrl + '/api/order/get-today-deliveries',{withCredentials:true})
+      console.log(result.data)
+      setTodayDeliveries(result.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(()=>{
     socket?.on('newAssignment',(data)=>{
       if(data.sendTo==userData._id){
@@ -98,12 +110,17 @@ function DelivaryBoy() {
   return ()=>{
     socket?.off('newAssignment')
   }
-  },[])
+  },[socket])
+
+  const rateperDelivery = 50 
+  const totalEarning = todayDeliveries.reduce((sum,d)=>sum + d.count*rateperDelivery,0)
+
 
 
   useEffect(() => {
     getAssignment()
     getCurrentOrder()
+    handletodayDeliveries()
   }, [userData])
 
   return (
@@ -113,6 +130,22 @@ function DelivaryBoy() {
         <div className='bg-white rounded-2xl shadow-md p-5 flex flex-col gap-3 justify-between items-center w-[90%] border-orange-100 text-center' >
           <h1 className='text-xl font-bold text-[#ff4d2d]'>Welcome, {userData.fullname}</h1>
           <p className='text-[#ff4d2d]'><span className='font-semibold'>Latitude:</span> {deliveryBoyLocation?.lat||userData.location.coordinates[1]}, <span className='font-semibold'>Longitude:</span> {deliveryBoyLocation?.lon||userData.location.coordinates[0]}</p>
+        </div>
+        <div className='bg-white rounded-2xl shadow-md p-5 w-[90%] mb-6 border border-orange-100'>
+          <h1 className='text-lg font-bold mb-3 text-[#ff4d2d]'>Today Deliveries</h1>
+          <ResponsiveContainer width='100%' height={200}> 
+              <BarChart data={todayDeliveries}>
+                  <CartesianGrid strokeDasharray={"3 3"} />
+                  <XAxis dataKey="hour" tickFormatter={(h)=>`${h}:00`} />
+                  <YAxis  allowDecimals={false} />
+                  <Tooltip formatter={(value)=>[value,"orders"]} labelFormatter={(label)=>`${label}:00 `} />
+                  <Bar dataKey="count" fill='#ff4d2d' />
+              </BarChart>
+          </ResponsiveContainer>
+          <div className='max-w-sm mx-auto mt-6 p-6 bg-white rounded-2xl shadow-lg text-center'>
+              <h1 className='text-xl font-semibold text-gray-800 mb-2'>Today's Earnings</h1>
+              <span className='text-3xl font-bold text-green-600'>₹{totalEarning}</span>
+          </div>
         </div>
 
         {!currentOrder &&
