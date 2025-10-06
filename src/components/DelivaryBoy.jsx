@@ -76,7 +76,7 @@ function DelivaryBoy() {
   const sendOtp = async () => {
     setLoading(true)
     try {
-      await axios.post(serverUrl + '/api/order/send-delivery-otp',{orderId:currentOrder._id,shopOrderId:currentOrder.shopOrder._id},{ withCredentials: true })
+      await axios.post(serverUrl +'/api/order/send-delivery-otp',{orderId:currentOrder._id,shopOrderId:currentOrder.shopOrder._id},{ withCredentials: true })
       setShowOtpBox(true)
       setLoading(false)
     } catch (error) {
