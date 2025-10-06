@@ -199,7 +199,6 @@ function DelivaryBoy() {
                   <input type="text" className='w-full border px-3 py-2 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-orange-400' placeholder='Enter OTP' value={otp} onChange={(e)=>setOtp(e.target.value)} />
                   {message && <p className='text-center text-green-400'>{message}</p>}
                   <button className='w-full bg-orange-500 text-white py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all' onClick={verifyOtp} >Submit OTP</button>
-                  
                 </div>
           }
           </div>

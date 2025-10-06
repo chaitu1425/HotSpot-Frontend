@@ -105,7 +105,9 @@ function Nav() {
                             <span className='absolute right-[-9px] top-[-12px] text-[#ff4d2d]'>{cartItems.length}</span>
                         </div>
                     }
+                    {userData.role=='user' && 
                         <button className='hidden md:block px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium cursor-pointer' onClick={()=>navigate('/my-orders')}>My Orders</button>
+                    }
 
                     </>
                 )}
