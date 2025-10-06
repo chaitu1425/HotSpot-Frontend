@@ -54,7 +54,7 @@ function App() {
     <Routes>
         
       <Route path='/signin' element={!userData?<SignIn />:<Navigate to={'/'} />} />
-      <Route path='/signup' element={!userData?<SignUpx />:<Navigate to={'/'} />} />
+      <Route path='/signup' element={!userData?<SignUp />:<Navigate to={'/'} />} />
       <Route path='/forgot-password' element={!userData?<Forgotpassword />:<Navigate to={'/'} />} />
       <Route path='/' element={userData?<Home />:<Navigate to={'/signin'} /> } />
 
