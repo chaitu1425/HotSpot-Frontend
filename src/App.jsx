@@ -23,7 +23,7 @@ import TrackOrderPage from './pages/TrackOrderPage.jsx';
 import Shop from './pages/Shop.jsx';
 import { io } from 'socket.io-client';
 import { setSocket } from './redux/userSlice.js';
-export const serverUrl = 'http://localhost:8000';
+export const serverUrl = 'https://hotspot-backend-cbw5.onrender.com';
 function App() {
 
   const dispatch = useDispatch()
@@ -54,6 +54,7 @@ function App() {
     <Routes>
         
       <Route path='/signin' element={!userData?<SignIn />:<Navigate to={'/'} />} />
+      <Route path='/signup' element={!userData?<SignUp />:<Navigate to={'/'} />} />
       <Route path='/forgot-password' element={!userData?<Forgotpassword />:<Navigate to={'/'} />} />
       <Route path='/' element={userData?<Home />:<Navigate to={'/signin'} /> } />
 
