@@ -37,23 +37,13 @@ function App() {
   GetmyOrder()
   
   useEffect(()=>{
-    const socketinstance = io(serverUrl,{
-    transports: ["polling", "websocket"], 
-    withCredentials: true,
-    reconnection: true,
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000,
-  })
-  dispatch(setSocket(socketinstance))
-    console.log("✅ Connected to socket:", socketinstance.id);
+    const socketinstance = io(serverUrl,{withCredentials:true})
+    dispatch(setSocket(socketinstance))
     socketinstance.on('connect',()=>{
-      if(userData?._id){
+      if(userData){
         socketinstance.emit('identity',{userId:userData._id})
       }
-  })
-  socketinstance.on("connect_error", (err) => {
-    console.error("❌ Socket connection error:", err.message);
-  });
+    })
     return ()=>{
       socketinstance.disconnect()
     }
